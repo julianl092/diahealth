@@ -1,18 +1,60 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <script>
+        $("document").ready(function(){
+            $("#register").hide();
+        });
+    </script>
     <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <button class="btn btn-default" id="toggle-login">Sign In</button> 
+    <button class="btn btn-default" id="toggle-register">Create Account</button>
+    <div id = "login">
+        <form action="" method="post" novalidate>
+            {{ loginform.hidden_tag() }}
+            <p>
+                {{ loginform.email.label }}<br>
+                {{ loginform.email(size=32) }}
+            </p>
+            <p>
+                {{ signupform.password.label }}<br>
+                {{ signupform.password(size=32) }}
+            </p>
+            <p>{{ loginform.remember_me}}<p>
+            <p>{{ signupform.submit() }}</p>
+        </form>
+    </div>
+    <div id = "register">
+        <form action="" method="post" novalidate>
+            {{ signupform.hidden_tag() }}
+            <p>
+                {{ signupform.firstname.label }}<br>
+                {{ signupform.lastname(size=32) }}
+            </p>
+            <p>
+                {{ signupform.lastname.label }}<br>
+                {{ signupform.lastname(size=32) }}
+            </p>
+            <p>
+                {{ signupform.email.label }}<br>
+                {{ signupform.email(size=32) }}
+            </p>
+            <p>
+                {{ signupform.password.label }}<br>
+                {{ signupform.password(size=32) }}
+            </p>
+            <p>{{ signupform.submit() }}</p>
+        </form>
+    </div>
+    <script>
+        $("#toggle-login").click(function(){
+            $("#register").hide().attr("formnovalidate");
+            $("#login").toggle();
+        });
+
+        $("#toggle-register").click(function(){
+            $("#login").hide().attr("formnovalidate");
+            $("#register").show();
+        });
+    </script>
 {% endblock %}

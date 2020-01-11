@@ -1,13 +1,10 @@
 <html>
     <head>
-      {% if title %}
-      <title>{{ title }} - Microblog</title>
-      {% else %}
-      <title>Welcome to Microblog</title>
-      {% endif %}
+      <title>Welcome to Dia Health</title>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     </head>
     <body>
-        <div>Microblog: <a href="/index">Home</a></div>
+        <div>Dia Health: <a href="/index">Home</a></div>
         <hr>
         {% block content %}{% endblock %}
     </body>
