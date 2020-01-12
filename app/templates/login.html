@@ -6,45 +6,41 @@
             $("#register").hide();
         });
     </script>
-    <h1>Sign In</h1>
+    <div class = "text-center">
     <button class="btn btn-default" id="toggle-login">Sign In</button> 
     <button class="btn btn-default" id="toggle-register">Create Account</button>
-    <div id = "login">
+    <div id = "login" class = "pt-3">
+        <h1>Welcome Back!</h1>
         <form action="" method="post" novalidate>
             {{ loginform.hidden_tag() }}
             <p>
-                {{ loginform.email.label }}<br>
-                {{ loginform.email(size=32) }}
+                {{ loginform.email(size=32, placeholder = "Email") }}
             </p>
             <p>
-                {{ signupform.password.label }}<br>
-                {{ signupform.password(size=32) }}
+                {{ signupform.password(size=32, placeholder = "Password") }}
             </p>
-            <p>{{ loginform.remember_me}}<p>
-            <p>{{ signupform.submit() }}</p>
+            <p>{{ loginform.remember_me}} Remember Me<p>
+            {{ loginform.submit(class="btn btn-default") }}       
         </form>
     </div>
-    <div id = "register">
+    <div id = "register" class = "pt-3">
         <form action="" method="post" novalidate>
             {{ signupform.hidden_tag() }}
             <p>
-                {{ signupform.firstname.label }}<br>
-                {{ signupform.lastname(size=32) }}
+                {{ signupform.firstname(size=32, placeholder = "First Name") }}
             </p>
             <p>
-                {{ signupform.lastname.label }}<br>
-                {{ signupform.lastname(size=32) }}
+                {{ signupform.lastname(size=32, placeholder = "Last Name") }}
             </p>
             <p>
-                {{ signupform.email.label }}<br>
-                {{ signupform.email(size=32) }}
+                {{ signupform.email(size=32, placeholder = "Email") }}
             </p>
             <p>
-                {{ signupform.password.label }}<br>
-                {{ signupform.password(size=32) }}
+                {{ signupform.password(size=32, placeholder = "Password") }}
             </p>
-            <p>{{ signupform.submit() }}</p>
+            {{ signupform.submit(class="btn btn-default") }}
         </form>
+    </div>
     </div>
     <script>
         $("#toggle-login").click(function(){
