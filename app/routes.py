@@ -8,7 +8,10 @@ from flask_login import logout_user
 
 @app.route('/')
 def index(): 
-    return render_template('base.html')
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else: 
+        return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
