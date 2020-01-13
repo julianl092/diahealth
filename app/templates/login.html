@@ -5,13 +5,17 @@
         $("document").ready(function(){
             $("#register").hide();
         });
+
     </script>
     <div id = "form-div">
     <div id = "login" class = "pt-3">
         <a class="btn btn-default toggle-login"><u>Sign In</u></a> 
         <a class="btn btn-default toggle-register">Create Account</a>
+        <div id = "shown">
+
+        </div>
         <h1>Welcome Back!</h1>
-        <form action="" method="post" onsubmit = "validate()">
+        <form action="/login" method="post" onsubmit = "validate()" novalidate>
             {{ loginform.hidden_tag() }}
             <p>
                 {{ loginform.email(size=32, placeholder = "Email") }}
@@ -26,10 +30,10 @@
     <div id = "register" class = "pt-3">
         <a class="btn btn-default toggle-login">Sign In</a> 
         <a class="btn btn-default toggle-register"><u>Create Account</u></a>
-        <form action="" method="post" onsubmit = "validate()">
+        <form action="/register" method="post" onsubmit = "validate()" novalidate>
             {{ signupform.hidden_tag() }}
             <p>
-                {{ signupform.firstname(size=32, plac    signup = BooleanField(default=False)eholder = "First Name") }}
+                {{ signupform.firstname(size=32, placeholder = "First Name") }}
             </p>
             <p>
                 {{ signupform.lastname(size=32, placeholder = "Last Name") }}
@@ -46,8 +50,7 @@
     </div>
     <script>
         $(".toggle-login").click(function(){
-            $("#register").hide();
-            $("#login").show();
+            $("#shown").html
         });
 
         $(".toggle-register").click(function(){
