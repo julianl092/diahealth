@@ -8,7 +8,7 @@
     </script>
     <div id = "form-div">
     <div id = "login" class = "pt-3">
-        <a class="btn btn-default toggle-login">Sign In</a> 
+        <a class="btn btn-default toggle-login"><u>Sign In</u></a> 
         <a class="btn btn-default toggle-register">Create Account</a>
         <h1>Welcome Back!</h1>
         <form action="" method="post" novalidate>
@@ -25,7 +25,7 @@
     </div>
     <div id = "register" class = "pt-3">
         <a class="btn btn-default toggle-login">Sign In</a> 
-        <a class="btn btn-default toggle-register">Create Account</a>
+        <a class="btn btn-default toggle-register"><u>Create Account</u></a>
         <form action="" method="post" novalidate>
             {{ signupform.hidden_tag() }}
             <p>
@@ -53,11 +53,6 @@
         $(".toggle-register").click(function(){
             $("#login").hide().attr("formnovalidate");
             $("#register").show();
-        });
-
-        var $buttons = jQuery('a');
-        $buttons.on('click',function() {
-            jQuery(this).addClass('active').siblings('a').removeClass('active');
         });
     </script>
 {% endblock %}
