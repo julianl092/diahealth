@@ -6,10 +6,10 @@
             $("#register").hide();
         });
     </script>
-    <div class = "text-center">
-    <button class="btn btn-default" id="toggle-login">Sign In</button> 
-    <button class="btn btn-default" id="toggle-register">Create Account</button>
+    <div id = "form-div">
     <div id = "login" class = "pt-3">
+        <a class="btn btn-default toggle-login">Sign In</a> 
+        <a class="btn btn-default toggle-register">Create Account</a>
         <h1>Welcome Back!</h1>
         <form action="" method="post" novalidate>
             {{ loginform.hidden_tag() }}
@@ -24,6 +24,8 @@
         </form>
     </div>
     <div id = "register" class = "pt-3">
+        <a class="btn btn-default toggle-login">Sign In</a> 
+        <a class="btn btn-default toggle-register">Create Account</a>
         <form action="" method="post" novalidate>
             {{ signupform.hidden_tag() }}
             <p>
@@ -43,14 +45,19 @@
     </div>
     </div>
     <script>
-        $("#toggle-login").click(function(){
+        $(".toggle-login").click(function(){
             $("#register").hide().attr("formnovalidate");
             $("#login").show();
         });
 
-        $("#toggle-register").click(function(){
+        $(".toggle-register").click(function(){
             $("#login").hide().attr("formnovalidate");
             $("#register").show();
+        });
+
+        var $buttons = jQuery('a');
+        $buttons.on('click',function() {
+            jQuery(this).addClass('active').siblings('a').removeClass('active');
         });
     </script>
 {% endblock %}
