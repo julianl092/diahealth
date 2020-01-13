@@ -1,6 +1,7 @@
 from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.ext.declarative import declared_attr
 
 
 class User(UserMixin, db.Model):
@@ -20,27 +21,45 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)    
 
-class RawQuestion(db.Model):
-
+class Question(db.Model):
+    __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
     question_text = db.Column(db.Text)
     created_on = db.Column(db.DateTime, default=db.func.now())
-    created_by = db.Column(db.Integer, db.ForeignKey(User.id))
+    @declared_attr
+    def created_by(cls):
+        return db.Column(db.Integer, db.ForeignKey(User.id))
+    type = db.Column(db.String(20))
+    _mapper_args__ = {
+        'polymorphic_on':type
+    }
+
+class RawQuestion(Question):
+    __tablename__ = "rawquestion"
+    _mapper_args__ = {
+        'polymorphic_identity': 'raw'
+    }
+    
 
 tags = db.Table('tags',
-    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
-    db.Column('question_id', db.Integer, db.ForeignKey('modifiedquestion.id'), primary_key=True)
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
+    db.Column('question_id', db.Integer, db.ForeignKey('modifiedquestion.id')), 
 )
 
-class ModifiedQuestion(RawQuestion): 
+class Tag(db.Model):
+    __tablename__ = 'tag'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+
+class ModifiedQuestion(Question): 
     __tablename__ = 'modifiedquestion'
     likes = db.Column(db.Integer)
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('modifiedquestion', lazy=True))
-
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
+    _mapper_args__ = {
+        'polymorphic_identity': 'modified'
+    }
+    
 
 
 
