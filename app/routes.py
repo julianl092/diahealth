@@ -23,7 +23,9 @@ def login():
     if request.method == 'GET':
         return render_template('login.html', title='Sign In', loginform=loginform, signupform=signupform)
     if request.method == 'POST':
+        print("Hi")
         if loginform.validate_on_submit():
+            print("LoginForm")
             user = User.query.filter_by(email=loginform.email.data).first()
             if user is None or not user.check_password(loginform.password.data):
                 flash('Invalid username or password')
@@ -31,6 +33,7 @@ def login():
             login_user(user, remember=loginform.remember_me.data)
             return redirect(url_for('index'))
         elif signupform.validate_on_submit(): 
+            print("SignupForm")
             user = User.query.filter_by(email=signupform.emailname.data).first()
             if user is not None: 
                 flash('Email already taken')

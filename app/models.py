@@ -10,8 +10,8 @@ class User(UserMixin, db.Model):
     lastname = db.Column(db.String(64), index=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    babyname = db.Column(db.String(64))
-    babybirth = db.Column(db.Date)
+    babyname = db.Column(db.String(64), nullable=True)
+    babybirth = db.Column(db.Date, nullable=True)
  
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

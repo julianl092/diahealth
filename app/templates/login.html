@@ -11,13 +11,13 @@
         <a class="btn btn-default toggle-login"><u>Sign In</u></a> 
         <a class="btn btn-default toggle-register">Create Account</a>
         <h1>Welcome Back!</h1>
-        <form action="" method="post" novalidate>
+        <form action="" method="post" onsubmit = "validate()">
             {{ loginform.hidden_tag() }}
             <p>
                 {{ loginform.email(size=32, placeholder = "Email") }}
             </p>
             <p>
-                {{ signupform.password(size=32, placeholder = "Password") }}
+                {{ loginform.password(size=32, placeholder = "Password") }}
             </p>
             <p>{{ loginform.remember_me}} Remember Me<p>
             {{ loginform.submit(class="btn btn-default") }}       
@@ -26,10 +26,10 @@
     <div id = "register" class = "pt-3">
         <a class="btn btn-default toggle-login">Sign In</a> 
         <a class="btn btn-default toggle-register"><u>Create Account</u></a>
-        <form action="" method="post" novalidate>
+        <form action="" method="post" onsubmit = "validate()">
             {{ signupform.hidden_tag() }}
             <p>
-                {{ signupform.firstname(size=32, placeholder = "First Name") }}
+                {{ signupform.firstname(size=32, plac    signup = BooleanField(default=False)eholder = "First Name") }}
             </p>
             <p>
                 {{ signupform.lastname(size=32, placeholder = "Last Name") }}
@@ -40,18 +40,18 @@
             <p>
                 {{ signupform.password(size=32, placeholder = "Password") }}
             </p>
-            {{ signupform.submit(class="btn btn-default") }}
+            {{ signupform.s_submit(class="btn btn-default") }}
         </form>
     </div>
     </div>
     <script>
         $(".toggle-login").click(function(){
-            $("#register").hide().attr("formnovalidate");
+            $("#register").hide();
             $("#login").show();
         });
 
         $(".toggle-register").click(function(){
-            $("#login").hide().attr("formnovalidate");
+            $("#login").hide();
             $("#register").show();
         });
     </script>
