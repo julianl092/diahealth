@@ -46,21 +46,34 @@ tags = db.Table('tags',
     db.Column('question_id', db.Integer, db.ForeignKey('modifiedquestion.id')), 
 )
 
+links = db.Table('links',
+    db.Column('link_id', db.Integer, db.ForeignKey('link.id')),
+    db.Column('question_id', db.Integer, db.ForeignKey('modifiedquestion.id')), 
+)
+
 class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
 
+class Link(db.Model):
+    __tablename__ = 'link'
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.Text)
+
 class ModifiedQuestion(Question): 
     __tablename__ = 'modifiedquestion'
+    answer = db.Column(db.Text)
     likes = db.Column(db.Integer)
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('modifiedquestion', lazy=True))
+    links = db.relationship('Link', secondary=links, lazy='subquery',
+    backref=db.backref('modifiedquestion', lazy=True))
     _mapper_args__ = {
         'polymorphic_identity': 'modified'
     }
-    
 
+    
 
 
 @login.user_loader
