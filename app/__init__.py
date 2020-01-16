@@ -15,6 +15,19 @@ login = LoginManager(app)
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 
 from app import routes, models
+from flask_login import current_user
 
-admin = Admin(app, name='run', template_mode='bootstrap3')
-admin.add_view(ModelView(models.ModifiedQuestion, db.session))
+class SecuredModelView(ModelView):
+
+    def is_accessible(self):
+        if current_user.is_authenticated:
+            return current_user.is_admin
+        else:
+            return False
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('login', next=request.url))
+
+admin = Admin(app, name='Dia Health Admin', template_mode='bootstrap3')
+admin.add_view(SecuredModelView(models.ModifiedQuestion, db.session))
