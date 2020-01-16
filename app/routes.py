@@ -52,6 +52,26 @@ def login():
         else: 
             return render_template('login.html', title='Sign In', loginform=loginform, signupform=signupform)
 
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    loginform = LoginForm()
+    signupform = SignupForm()
+    if request.method == 'GET':
+        return render_template('login.html', title='Sign In', loginform=loginform, signupform=signupform)
+    elif request.method == 'POST':
+        if loginform.validate_on_submit():
+            print("LoginForm")
+            user = User.query.filter_by(email=loginform.email.data).first()
+            if user is None or not user.check_password(loginform.password.data):
+                flash('Invalid username or password')
+                return redirect(url_for('login'))
+            login_user(user, remember=loginform.remember_me.data)
+            return redirect(url_for('index'))
+        else: 
+            return render_template('login.html', title='Sign In', loginform=loginform, signupform=signupform)
+
 @app.route('/logout')
 def logout():
     logout_user()
