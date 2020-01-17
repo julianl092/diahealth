@@ -1,10 +1,27 @@
 from flask_login import current_user, login_user
-from app.models import User
+from app.models import User, ModifiedQuestion
 from app.forms import LoginForm, SignupForm
-from app import app, db
+from app import app, db, admin
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import logout_user
+from flask_admin.contrib.sqla import ModelView
 
+
+class SecuredModelView(ModelView):
+    
+    can_export = True
+
+    def is_accessible(self):
+        if current_user.is_authenticated:
+            return current_user.is_admin
+        else:
+            return False
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('login', next=request.url))
+
+admin.add_view(SecuredModelView(ModifiedQuestion, db.session))
 
 @app.route('/')
 def index(): 
