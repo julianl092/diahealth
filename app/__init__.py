@@ -12,6 +12,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 admin = Admin(app, name='Dia Health Admin', template_mode='bootstrap3')
+app.static_folder = 'static'
 
 from app import routes, models
 

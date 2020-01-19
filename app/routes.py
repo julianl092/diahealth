@@ -5,6 +5,7 @@ from app import app, db, admin
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import logout_user
 from flask_admin.contrib.sqla import ModelView
+from sqlalchemy import desc
 
 
 class SecuredModelView(ModelView):
@@ -23,12 +24,14 @@ class SecuredModelView(ModelView):
 
 admin.add_view(SecuredModelView(ModifiedQuestion, db.session))
 
-@app.route('/')
-def index(): 
+@app.route('/', defaults={'show': 20})
+@app.route("/<int:show>")
+def index(show): 
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else: 
-        return render_template('index.html')
+        questions = db.session.query(ModifiedQuestion).order_by(desc(ModifiedQuestion.likes)).limit(show)
+        return render_template('index.html', questions=questions)
 
 
 @app.route('/register', methods=['POST'])
@@ -36,7 +39,7 @@ def register():
     signupform = SignupForm()
     if signupform.validate_on_submit(): 
         print("SignupForm")
-        user = User.query.filter_by(email=signupform.emailh.data).first()
+        user = User.query.filter_by(email=signupform.email.data).first()
         if user is not None: 
             flash('Email already taken')
             return redirect(url_for('login'))

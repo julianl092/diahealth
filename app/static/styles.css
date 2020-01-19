@@ -1,0 +1,72 @@
+ @font-face {
+          font-family: 'Berlin Sans FB';
+          src: url(fonts/Berlin_Sans_FB.ttf);
+        }
+
+        html {
+          min-height: 100%
+        }
+
+        body {
+          background: linear-gradient(180deg, rgba(255,255,255,0.9402135854341737) 0%, rgba(215,242,245,1) 30%, rgba(43,181,194,1) 100%) fixed;
+          font-family: Berlin Sans FB;
+          height: 100%;
+          margin: 0;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+        }
+
+        .vertical-center {
+          align-items: center;
+        }
+
+        input {
+          background: none;
+          border: none;
+          outline: none;
+        }
+
+        .liked {
+          color: blue;
+        }
+
+          .form-control:focus {
+          box-shadow: none;
+          }
+  
+          .form-control-underlined {
+          border-width: 0;
+          border-bottom-width: 1px;
+          border-radius: 0;
+          padding-left: 0;
+          }
+          .form-control::placeholder {
+          font-size: 0.95rem;
+          color: #aaa;
+          font-style: italic;
+        }
+        .navbar {
+          background: none;
+        }
+        .full-height {
+          height:100%;
+        }
+
+        #form-div {
+          display: table;
+          width: 100%;
+          height: 75%;
+        }
+
+        #form-div > div, button { 
+          display: table-cell;
+          vertical-align: middle;
+          text-align: center;
+        }
+
+        u {
+          text-decoration: none;
+          border-bottom: 3px solid rgba(43,181,194,1);
+        }
+
+  

@@ -6,6 +6,18 @@
             $("#submissions").hide();
             $("#category").hide();
         });
+
+        function toggleLike(element) {
+            var tracker = element.parentElement.parentElement.nextElementSibling.firstElementChild;
+            var oldLikes = parseInt(tracker.innerHTML, 10);
+            if ($(element).hasClass('liked')) { 
+                var newLikes = oldLikes - 1;                
+            } else {
+                var newLikes = oldLikes + 1; 
+            }
+            tracker.innerHTML = newLikes;
+            $(element).toggleClass('liked')
+        }
     </script>
     <div class = "text-center">
             <form action="">
@@ -23,7 +35,26 @@
     <button class="btn btn-default" id="toggle-submissions">Submissions</button>
     <button class="btn btn-default" id="toggle-category">Category</button>
     <div id = "top" class = "pt-3">
-        Content for Top
+        <table class = 'table table-hover'>
+            {% for question in questions %}
+                <tr>
+                    <table class = 'table-borderless'>
+                        <tr>
+                            <td><button class = 'btn' style = 'background-color: transparent;' onClick = "toggleLike(this)"><i class="fa fa-thumbs-up" style="font-size:36px"></i> </button></td>
+                            <td>{{ question.question_text}}</td>
+                        </tr>
+                        <tr>
+                            <td style = 'vertical-align: top; text-align: center'> 
+                                {{question.likes}}
+                            </td>
+                            <td>
+                                    {{ question.answer}}
+                            </td>
+                        </tr>
+                    </table>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
     <div id = "submissions" class = "pt-3">
         Content for Submissions
