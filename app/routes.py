@@ -1,11 +1,11 @@
 from flask_login import current_user, login_user
-from app.models import User, ModifiedQuestion
-from app.forms import LoginForm, SignupForm
 from app import app, db, admin
+from app.models import User, ModifiedQuestion, likes
+from app.forms import LoginForm, SignupForm
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import logout_user
 from flask_admin.contrib.sqla import ModelView
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 
 
 class SecuredModelView(ModelView):
@@ -30,15 +30,17 @@ def index(show):
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else: 
-        questions = db.session.query(ModifiedQuestion).order_by(desc(ModifiedQuestion.likes)).limit(show)
-        return render_template('index.html', questions=questions)
+        questions = db.session.query(ModifiedQuestion, func.count(likes.c.user_id).label('total')).join(likes).group_by(ModifiedQuestion)
+        print(questions)
+        return render_template('index.html', questions=questions, user=current_user)
 
-@app.route('/likes', methods=['POST'])
-def likes():
+@app.route('/like', methods=['POST'])
+def like():
     qid = request.form['id']
     mod = int(request.form['likes'])
     question = ModifiedQuestion.query.filter_by(id=qid).first()
     question.likes = question.likes + mod
+    current_user.likes.append(question)
     db.session.commit()
     return ('', 200)
 

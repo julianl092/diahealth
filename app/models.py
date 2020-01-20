@@ -4,6 +4,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.declarative import declared_attr
 
 
+likes = db.Table('likes',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('question_id', db.Integer, db.ForeignKey('modifiedquestion.id')), 
+)
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(64))
@@ -56,6 +61,8 @@ links = db.Table('links',
     db.Column('question_id', db.Integer, db.ForeignKey('modifiedquestion.id')), 
 )
 
+
+
 class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True)
@@ -69,17 +76,20 @@ class Link(db.Model):
 class ModifiedQuestion(Question): 
     __tablename__ = 'modifiedquestion'
     answer = db.Column(db.Text)
-    likes = db.Column(db.Integer)
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('modifiedquestion', lazy=True))
+
     links = db.relationship('Link', secondary=links, lazy='subquery',
     backref=db.backref('modifiedquestion', lazy=True))
+
+    likes = db.relationship('User', secondary=likes, 
+        backref=db.backref('modifiedquestion', lazy='dynamic'))
+
     _mapper_args__ = {
         'polymorphic_identity': 'modified'
     }
 
     
-
 
 @login.user_loader
 def load_user(id):
