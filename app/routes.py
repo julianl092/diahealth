@@ -33,6 +33,14 @@ def index(show):
         questions = db.session.query(ModifiedQuestion).order_by(desc(ModifiedQuestion.likes)).limit(show)
         return render_template('index.html', questions=questions)
 
+@app.route('/likes', methods=['POST'])
+def likes():
+    qid = request.form['id']
+    mod = int(request.form['likes'])
+    question = ModifiedQuestion.query.filter_by(id=qid).first()
+    question.likes = question.likes + mod
+    db.session.commit()
+    return ('', 200)
 
 @app.route('/register', methods=['POST'])
 def register():

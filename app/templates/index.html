@@ -10,11 +10,26 @@
         function toggleLike(element) {
             var tracker = element.parentElement.parentElement.nextElementSibling.firstElementChild;
             var oldLikes = parseInt(tracker.innerHTML, 10);
+            var add = 1;
             if ($(element).hasClass('liked')) { 
-                var newLikes = oldLikes - 1;                
+                var newLikes = oldLikes - 1;   
+                add = -1;             
             } else {
                 var newLikes = oldLikes + 1; 
             }
+
+            $.ajax({ 
+                url : "/likes", 
+                type: "POST", 
+                data : {likes : add, id : element.id} , 
+                success: function(data, textStatus, jqXHR) { 
+                    console.log(data);// You can see the result which is created in chat.php
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);// if there is an error
+                }
+            });
+
             tracker.innerHTML = newLikes;
             $(element).toggleClass('liked')
         }
@@ -40,7 +55,7 @@
                 <tr>
                     <table class = 'table-borderless'>
                         <tr>
-                            <td><button class = 'btn' style = 'background-color: transparent;' onClick = "toggleLike(this)"><i class="fa fa-thumbs-up" style="font-size:36px"></i> </button></td>
+                            <td><button id = '{{question.id | safe}}' class = 'btn' style = 'background-color: transparent;' onClick = "toggleLike(this)"><i class="fa fa-thumbs-up" style="font-size:36px"></i> </button></td>
                             <td>{{ question.question_text}}</td>
                         </tr>
                         <tr>
