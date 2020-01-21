@@ -45,7 +45,6 @@ def category(cid):
     print(questions)
     return render_template('category.html', questions=questions)
 
-
 @app.route('/like', methods=['POST'])
 def like():
     qid = request.form['id']
