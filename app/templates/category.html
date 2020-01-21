@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table>
+{% for question in questions %}
+<tr>
+    <td>
+            {{question.question_text}}
+    </td>
+</tr>
+<tr>
+    <td>
+            {{question.answer}}
+    </td>
+
+</tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}

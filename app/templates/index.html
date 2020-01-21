@@ -75,7 +75,14 @@
         Content for Submissions
     </div>
     <div id = "category" class = "pt-3">
-        Content for Category
+        <table class = 'table'>
+            {% for pair in zipped %}
+                <tr>
+                    <td><a href = "/category/{{pair[0].id | safe}}">{{pair[0].name}}</a></td>
+                    <td><a href = "/category/{{pair[1].id | safe}}">{{pair[1].name}}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
     </div>
     <script>

@@ -1,6 +1,6 @@
 from flask_login import current_user, login_user
 from app import app, db, admin
-from app.models import User, ModifiedQuestion, likes
+from app.models import User, ModifiedQuestion, likes, Tag
 from app.forms import LoginForm, SignupForm
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import logout_user
@@ -31,8 +31,20 @@ def index(show):
         return redirect(url_for('login'))
     else: 
         questions = db.session.query(ModifiedQuestion, func.count(likes.c.user_id).label('total')).join(likes).group_by(ModifiedQuestion).all()
-        print(questions[0].ModifiedQuestion.question_text)
-        return render_template('index.html', questions=questions, user=current_user)
+        tags = db.session.query(Tag).all()
+        l1 = tags[:len(tags) // 2]
+        if len(tags) % 2 == 1: 
+            l1.append(" ")
+        l2 = tags[len(tags) // 2:]
+        zipped = zip(l1, l2)
+        return render_template('index.html', questions=questions, user=current_user, zipped=zipped)
+
+@app.route("/category/<int:cid>")
+def category(cid): 
+    questions = db.session.query(ModifiedQuestion).filter(ModifiedQuestion.tags.any(Tag.id == cid))
+    print(questions)
+    return render_template('category.html', questions=questions)
+
 
 @app.route('/like', methods=['POST'])
 def like():
