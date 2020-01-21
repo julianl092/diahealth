@@ -19,7 +19,7 @@
             }
 
             $.ajax({ 
-                url : "/likes", 
+                url : "/like", 
                 type: "POST", 
                 data : {likes : add, id : element.id} , 
                 success: function(data, textStatus, jqXHR) { 
@@ -55,15 +55,15 @@
                 <tr>
                     <table class = 'table-borderless'>
                         <tr>
-                            <td><button id = '{{question.id | safe}}' class = "btn {{'liked' if question in user.likes}}" style = 'background-color: transparent;' onClick = "toggleLike(this)"><i class="fa fa-thumbs-up" style="font-size:36px"></i> </button></td>
-                            <td>{{ question.question_text}}</td>
+                            <td><button id = '{{question.ModifiedQuestion.id | safe}}' class = "btn {{'liked' if user in question.ModifiedQuestion.likes}}" style = 'background-color: transparent;' onClick = "toggleLike(this)"><i class="fa fa-thumbs-up" style="font-size:36px"></i> </button></td>
+                            <td>{{ question.ModifiedQuestion.question_text}}</td>
                         </tr>
                         <tr>
                             <td style = 'vertical-align: top; text-align: center'> 
-                                {{question.user | length}}
+                                {{question.total}}
                             </td>
                             <td>
-                                    {{ question.answer}}
+                            {{ question.ModifiedQuestion.answer}}
                             </td>
                         </tr>
                     </table>

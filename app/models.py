@@ -83,7 +83,7 @@ class ModifiedQuestion(Question):
     backref=db.backref('modifiedquestion', lazy=True))
 
     likes = db.relationship('User', secondary=likes, 
-        backref=db.backref('modifiedquestion', lazy='dynamic'))
+        backref=db.backref('modifiedquestion'))
 
     _mapper_args__ = {
         'polymorphic_identity': 'modified'

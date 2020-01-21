@@ -30,17 +30,19 @@ def index(show):
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else: 
-        questions = db.session.query(ModifiedQuestion, func.count(likes.c.user_id).label('total')).join(likes).group_by(ModifiedQuestion)
-        print(questions)
+        questions = db.session.query(ModifiedQuestion, func.count(likes.c.user_id).label('total')).join(likes).group_by(ModifiedQuestion).all()
+        print(questions[0].ModifiedQuestion.question_text)
         return render_template('index.html', questions=questions, user=current_user)
 
 @app.route('/like', methods=['POST'])
 def like():
     qid = request.form['id']
+    question = db.session.query(ModifiedQuestion).filter_by(id=qid).first()
     mod = int(request.form['likes'])
-    question = ModifiedQuestion.query.filter_by(id=qid).first()
-    question.likes = question.likes + mod
-    current_user.likes.append(question)
+    if mod == 1 and current_user not in question.likes:
+        question.likes.append(current_user)
+    elif current_user in question.likes:
+        question.likes.remove(current_user)
     db.session.commit()
     return ('', 200)
 
