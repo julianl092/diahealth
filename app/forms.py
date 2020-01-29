@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
 class SignupForm(FlaskForm):
@@ -9,6 +9,9 @@ class SignupForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     s_submit = SubmitField('Sign Up')
 
+class QuestionForm(FlaskForm):
+    question = TextAreaField("What's your question?", validators = [DataRequired()])
+    submit = SubmitField('Submit your question') 
 
 class LoginForm(FlaskForm):
     email = StringField('Email Address', validators=[DataRequired()])

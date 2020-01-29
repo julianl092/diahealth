@@ -1,7 +1,7 @@
 from flask_login import current_user, login_user
 from app import app, db, admin
-from app.models import User, ModifiedQuestion, likes, Tag
-from app.forms import LoginForm, SignupForm
+from app.models import User, ModifiedQuestion, likes, Tag, RawQuestion
+from app.forms import LoginForm, SignupForm, QuestionForm
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import logout_user
 from flask_admin.contrib.sqla import ModelView
@@ -23,21 +23,29 @@ class SecuredModelView(ModelView):
         return redirect(url_for('login', next=request.url))
 
 admin.add_view(SecuredModelView(ModifiedQuestion, db.session))
+admin.add_view(SecuredModelView(RawQuestion, db.session))
 
-@app.route('/', defaults={'show': 20})
+
+@app.route('/', defaults={'show': 10})
 @app.route("/<int:show>")
 def index(show): 
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else: 
+        print(show)
+        questionform = QuestionForm()
         questions = db.session.query(ModifiedQuestion, func.count(likes.c.user_id).label('total')).join(likes).group_by(ModifiedQuestion).all()
+        if len(questions) < show:
+            rem_questions = db.session.query(ModifiedQuestion).filter(~ModifiedQuestion.likes.any()).limit(show - len(questions)).all()
+        else:
+            rem_questions = []
         tags = db.session.query(Tag).all()
         l1 = tags[:len(tags) // 2]
         if len(tags) % 2 == 1: 
             l1.append(" ")
         l2 = tags[len(tags) // 2:]
         zipped = zip(l1, l2)
-        return render_template('index.html', questions=questions, user=current_user, zipped=zipped)
+        return render_template('index.html', questions=questions, rem_questions=rem_questions, questionform=questionform, user=current_user, zipped=zipped)
 
 @app.route("/category/<int:cid>")
 def category(cid): 
@@ -56,7 +64,7 @@ def like():
         question.likes.remove(current_user)
     db.session.commit()
     return ('', 200)
-
+RawQuestion
 @app.route('/register', methods=['POST'])
 def register():
     signupform = SignupForm()
@@ -87,14 +95,26 @@ def login():
         if loginform.validate_on_submit():
             print("LoginForm")
             user = User.query.filter_by(email=loginform.email.data).first()
+            print(user)
             if user is None or not user.check_password(loginform.password.data):
                 flash('Invalid username or password')
+                print("Invalid password")
                 return redirect(url_for('login'))
             login_user(user, remember=loginform.remember_me.data)
             return redirect(url_for('index'))
         else: 
             return render_template('login.html', title='Sign In', loginform=loginform, signupform=signupform)
 
+@app.route('/submitquestion', methods=['POST'])
+def submitquestion():
+    questionform = QuestionForm() 
+    if questionform.validate_on_submit(): 
+        text = questionform.question.data
+        raw = RawQuestion(question_text=text, created_by=current_user.id, user_email=current_user.email)
+        db.session.add(raw)
+        db.session.commit()
+        return redirect(url_for("index"))
+    
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if current_user.is_authenticated:
@@ -105,7 +125,6 @@ def admin():
         return render_template('login.html', title='Sign In', loginform=loginform, signupform=signupform)
     elif request.method == 'POST':
         if loginform.validate_on_submit():
-            print("LoginForm")
             user = User.query.filter_by(email=loginform.email.data).first()
             if user is None or not user.check_password(loginform.password.data):
                 flash('Invalid username or password')

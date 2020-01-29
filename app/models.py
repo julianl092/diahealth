@@ -36,6 +36,7 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question_text = db.Column(db.Text)
     created_on = db.Column(db.DateTime, default=db.func.now())
+    user_email = db.Column(db.String(120), index=True)
     @declared_attr
     def created_by(cls):
         return db.Column(db.Integer, db.ForeignKey(User.id))
@@ -61,8 +62,6 @@ links = db.Table('links',
     db.Column('question_id', db.Integer, db.ForeignKey('modifiedquestion.id')), 
 )
 
-
-
 class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True)
@@ -83,7 +82,7 @@ class ModifiedQuestion(Question):
     backref=db.backref('modifiedquestion', lazy=True))
 
     likes = db.relationship('User', secondary=likes, 
-        backref=db.backref('modifiedquestion'))
+        backref=db.backref('modifiedquestion', lazy='dynamic'))
 
     _mapper_args__ = {
         'polymorphic_identity': 'modified'

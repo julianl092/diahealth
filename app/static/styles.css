@@ -2,6 +2,10 @@
           font-family: 'Berlin Sans FB';
           src: url(fonts/Berlin_Sans_FB.ttf);
         }
+        
+        a {
+          color: inherit;
+        }
 
         html {
           min-height: 100%
@@ -62,6 +66,40 @@
           display: table-cell;
           vertical-align: middle;
           text-align: center;
+        }
+
+        .categorycell { 
+          border: 2px solid  rgba(43,181,194,1);
+          color: black !important;
+          font-size: 18px;
+          height: 100px;
+          border-radius: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center !important;
+        }
+
+        #categorytable { 
+          border-spacing: 14px;
+          border-collapse: separate;
+          border:none;
+        }
+
+        table, tr, td  {
+          border: none !important;
+        }
+
+        #submission-label {
+          font-size: 20px;
+        }
+
+        textarea {
+          resize: none !important;
+        }
+
+        #questionbutton {
+          background: rgba(43,181,194,1);
+          color: white;
         }
 
         u {

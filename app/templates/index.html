@@ -50,6 +50,16 @@
     <button class="btn btn-default" id="toggle-submissions">Submissions</button>
     <button class="btn btn-default" id="toggle-category">Category</button>
     <div id = "top" class = "pt-3">
+    <div class="dropdown show">
+            <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Show:
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="/10">10</a>
+                <a class="dropdown-item" href="/20">20</a>
+                <a class="dropdown-item" href="/50">50</a>
+            </div>
+            </div> 
         <table class = 'table table-hover'>
             {% for question in questions %}
                 <tr>
@@ -69,17 +79,44 @@
                     </table>
                 </tr>
             {% endfor %}
+            {% for rquestion in rem_questions %}
+            <tr>
+                    <table class = 'table-borderless'>
+                        <tr>
+                            <td><button id = '{{rquestion.id | safe}}' class = "btn {{'liked' if user in rquestion.likes}}" style = 'background-color: transparent;' onClick = "toggleLike(this)"><i class="fa fa-thumbs-up" style="font-size:36px"></i> </button></td>
+                            <td>{{ rquestion.question_text}}</td>
+                        </tr>
+                        <tr>
+                            <td style = 'vertical-align: top; text-align: center'> 
+                                0
+                            </td>
+                            <td>
+                            {{ rquestion.answer}}
+                            </td>
+                        </tr>
+                    </table>
+                </tr>
+            {% endfor %}
         </table>
     </div>
     <div id = "submissions" class = "pt-3">
-        Content for Submissions
+        <form action="/submitquestion" method="post">
+            {{ questionform.hidden_tag() }}
+            <p id = "submission-label">
+                Have a question? Submit it to be answered by our team of experts, within 24 hours!
+            </p>
+            <div class = "form-group">
+            {{ questionform.question(class="form-control")}}
+            </div>
+            {{ questionform.submit(class="btn btn-default", id = "questionbutton") }}       
+        </form>
     </div>
     <div id = "category" class = "pt-3">
-        <table class = 'table'>
+        <table class = 'table' id = 'categorytable'>
             {% for pair in zipped %}
                 <tr>
-                    <td><a href = "/category/{{pair[0].id | safe}}">{{pair[0].name}}</a></td>
-                    <td><a href = "/category/{{pair[1].id | safe}}">{{pair[1].name}}</a></td>
+                    <td><div class = 'categorycell'><a href = "/category/{{pair[0].id | safe}}">{{pair[0].name}}</a></div></td>
+                    <td><div class = 'categorycell'><a href = "/category/{{pair[1].id | safe}}">{{pair[1].name}}</a></div></td>
                 </tr>
             {% endfor %}
         </table>
@@ -103,8 +140,5 @@
             $("#top").hide();
             $("#category").show();
         });
-
-
-    
     </script>
 {% endblock %}
