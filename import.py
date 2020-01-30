@@ -15,7 +15,7 @@ with open('database.csv') as csv_file:
             t2 = Tag(name=row['Category 2'])
             db.session.add(t2)
             db.session.commit()
-        q = ModifiedQuestion(question_text=row['Topic/Question'], type='modified', answer=row['Answer'], created_by=1, likes=0)
+        q = ModifiedQuestion(question_text=row['Topic/Question'], type='modified', answer=row['Answer'], created_by=1)
         qtags = db.session.query(Tag).filter(Tag.name.in_([row['Category 1'], row['Category 2']])).all()
         q.tags = [qtag for qtag in qtags]  
         db.session.add(q)
