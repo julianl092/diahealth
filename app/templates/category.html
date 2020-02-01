@@ -1,21 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<table>
-{% for question in questions %}
-<tr>
-    <td>
-            {{question.question_text}}
-    </td>
-</tr>
-<tr>
-    <td>
-            {{question.answer}}
-    </td>
+    <script>
+          function toggleLike(element) {
+            var tracker = element.parentElement.parentElement.nextElementSibling.firstElementChild;
+            var oldLikes = parseInt(tracker.innerHTML, 10);
+            var add = 1;
+            if ($(element).hasClass('liked')) { 
+                var newLikes = oldLikes - 1;   
+                add = -1;             
+            } else {
+                var newLikes = oldLikes + 1; 
+            }
 
-</tr>
-{% endfor %}
-</table>
+            $.ajax({ 
+                url : "/like", 
+                type: "POST", 
+                data : {likes : add, id : element.id} , 
+                success: function(data, textStatus, jqXHR) { 
+                    console.log(data);// You can see the result which is created in chat.php
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);// if there is an error
+                }
+            });
 
-
+            tracker.innerHTML = newLikes;
+            $(element).toggleClass('liked')
+        }
+    </script>
+    <table class = 'table table-hover'>
+        {% for question in questions %}
+            <tr>
+                <table class = 'table-borderless'>
+                    <tr>
+                        <td><button id = '{{question.ModifiedQuestion.id | safe}}' class = "btn {{'liked' if user in question.ModifiedQuestion.likes}}" style = 'background-color: transparent;' onClick = "toggleLike(this)"><i class="fa fa-thumbs-up" style="font-size:36px"></i> </button></td>
+                        <td>{{ question.ModifiedQuestion.question_text}}</td>
+                    </tr>
+                    <tr>
+                        <td style = 'vertical-align: top; text-align: center'> 
+                            {{question.total}}
+                        </td>
+                        <td>
+                        {{ question.ModifiedQuestion.answer}}
+                        </td>
+                    </tr>
+                </table>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

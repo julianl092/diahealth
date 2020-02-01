@@ -32,7 +32,6 @@ def index(show):
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else: 
-        print(show)
         questionform = QuestionForm()
         questions = db.session.query(ModifiedQuestion, func.count(likes.c.user_id).label('total')).join(likes).group_by(ModifiedQuestion).all()
         if len(questions) < show:
@@ -49,9 +48,8 @@ def index(show):
 
 @app.route("/category/<int:cid>")
 def category(cid): 
-    questions = db.session.query(ModifiedQuestion).filter(ModifiedQuestion.tags.any(Tag.id == cid))
-    print(questions)
-    return render_template('category.html', questions=questions)
+    questions = db.session.query(ModifiedQuestion, func.count(likes.c.user_id).label('total')).filter(ModifiedQuestion.tags.any(Tag.id == cid)).join(likes).group_by(ModifiedQuestion).all()
+    return render_template('category.html', user=current_user, questions=questions)
 
 @app.route('/like', methods=['POST'])
 def like():
