@@ -23,10 +23,10 @@
                 type: "POST", 
                 data : {likes : add, id : element.id} , 
                 success: function(data, textStatus, jqXHR) { 
-                    console.log(data);// You can see the result which is created in chat.php
+                    console.log(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);// if there is an error
+                    console.log(textStatus);
                 }
             });
 
