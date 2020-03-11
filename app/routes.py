@@ -62,7 +62,7 @@ def like():
         question.likes.remove(current_user)
     db.session.commit()
     return ('', 200)
-RawQuestion
+
 @app.route('/register', methods=['POST'])
 def register():
     signupform = SignupForm()
